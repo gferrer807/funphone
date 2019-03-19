@@ -5,9 +5,7 @@ import axios from 'axios';
 class Contacts extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      contacts: []
-    };
+
   }
 
   render() {
@@ -18,7 +16,7 @@ class Contacts extends React.Component {
           {this.props.contacts.map((items, key) => {
             return (
               <div>
-                <li value={items.cName} key={key}>{items.cName}</li>
+                <li value={items.cName} key={key} onClick={() => {this.props.setContact(items.cName)}}>{items.cName}</li>
               </div>
             )
           })}

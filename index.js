@@ -1,9 +1,8 @@
 // Download the helper library from https://www.twilio.com/docs/node/install
 // Your Account Sid and Auth Token from twilio.com/console
 // DANGER! This is insecure. See http://twil.io/secure
-const accountSid = 'AC814f6317ff43678b14681970e4eba1c3';
-const authToken = 'd18057230462b8c5e5917ba799c5f369';
-const client = require('twilio')(accountSid, authToken);
+const {authId, authToken} = require('./config.js')
+const client = require('twilio')(authId, authToken);
 const express = require('express');
 const path = require('path');
 const db = require('./database.js')
@@ -22,7 +21,7 @@ app.get('/contacts', (req, res) => {
   connection.query('select * from contacts', function (error, results, fields) {
     if (error) {throw error} 
     else {
-      console.log('results', results);
+      //console.log('results', results);
       res.send(results);
     }
   });
@@ -32,11 +31,17 @@ app.get('/messages', (req, res) => {
   connection.query('select * from messages', function (error, results, fields) {
     if (error) {throw error} 
     else {
-      console.log('results', results);
+      //console.log('results', results);
       res.send(results);
     }
   });
 });
+
+app.post('/call', (req, res) => {
+  console.log('req.params', req.params);
+  console.log('req body', req.body);
+  console.log('req query', req.query);
+})
 
 
 /*

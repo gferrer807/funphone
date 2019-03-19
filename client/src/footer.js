@@ -3,10 +3,14 @@ import ReactDOM from "react-dom";
 import axios from 'axios';
 
 class Footer extends React.Component {
+  constructor(props) {
+    super(props);
+
+  }
   render() {
     return (
       <footer className="footer">
-          <button>Call!</button>
+          <button onClick={() => {this.props.makeCall()}}>Call!</button>
       </footer>
     )
   }

@@ -11,10 +11,15 @@ class App extends React.Component {
     super(props);
     this.state = {
       contacts: [],
-      messages: []
+      messages: [],
+      selectedContact: "",
+      selectedMessage: ""
     };
+    this.setContact = this.setContact.bind(this);
+    this.setMessage = this.setMessage.bind(this);
     this.getContacts = this.getContacts.bind(this);
     this.getMessages = this.getMessages.bind(this);
+    this.makeCall = this.makeCall.bind(this);
   }
 
   componentDidMount() {
@@ -25,7 +30,6 @@ class App extends React.Component {
   getContacts() {
     axios.get('http://localhost:3000/contacts')
     .then((data) => {
-      console.log('data for contacts', data)
       this.setState({
         contacts: data.data
       });
@@ -47,13 +51,37 @@ class App extends React.Component {
     })
   }
 
+  setContact(contact) {
+    this.setState({
+      selectedContact: contact
+    })
+  }
+
+  setMessage(message) {
+    this.setState({
+      selectedMessage: message
+    })
+  }
+
+  makeCall() {
+    console.log('Ring Ring.....Ring Ring.....')
+    axios.post('http://localhost:3000/call', {
+      contact: this.state.selectedContact,
+      message: this.state.selectedMessage
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
+
   render() {
     return (
     <div className="wrapper">
-      <Contacts contacts={this.state.contacts}/>
+      <Contacts contacts={this.state.contacts} setContact={this.setContact}/>
       <Messagemaker />
-      <Message messages={this.state.messages}/>
-      <Footer />
+      <Message messages={this.state.messages} setMessage={this.setMessage}/>
+      <Footer makeCall={this.makeCall}/>
     </div>);
   }
 }

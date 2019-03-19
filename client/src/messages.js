@@ -18,7 +18,7 @@ class Message extends React.Component {
           {this.props.messages.map((items, key) => {
             return(
               <div>
-                <li value={items.mName} key={key}>{items.mName}</li>
+                <li value={items.mName} key={key} onClick={() => {this.props.setMessage(items.mName)}}>{items.mName}</li>
               </div>
             )
           })}
