@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Say voice="alice" language="en-AU">Hey, is your refigerator running? Jk, you don't have a fridge because you're ugly</Say>
+</Response>
