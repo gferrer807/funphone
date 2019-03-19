@@ -1,11 +1,12 @@
 // Download the helper library from https://www.twilio.com/docs/node/install
 // Your Account Sid and Auth Token from twilio.com/console
 // DANGER! This is insecure. See http://twil.io/secure
-const {authId, authToken} = require('./config.js')
+const {authId, authToken, myNumber} = require('./config.js')
 const client = require('twilio')(authId, authToken);
 const express = require('express');
 const path = require('path');
 const db = require('./database.js')
+const parser = require('body-parser');
 
 const mysql = require('mysql');
 
@@ -17,6 +18,7 @@ var connection = mysql.createConnection({
 });
 
 const app = express();
+app.use(parser.json());
 app.get('/contacts', (req, res) => {
   connection.query('select * from contacts', function (error, results, fields) {
     if (error) {throw error} 
@@ -38,9 +40,31 @@ app.get('/messages', (req, res) => {
 });
 
 app.post('/call', (req, res) => {
-  console.log('req.params', req.params);
-  console.log('req body', req.body);
-  console.log('req query', req.query);
+  var callNumber;
+  var messageLink;
+
+  connection.query(`select * from contacts where cName=?`, [req.body.contact], function (error, results, fields) {
+    if (error) {throw error} 
+    else {
+      //console.log('results', results);
+      callNumber = results[0]['cNumber'];
+    }
+  });
+  connection.query(`select * from messages where mName=?`, [req.body.message], function (error, results, fields) {
+    if (error) {throw error} 
+    else {
+      //console.log('results', results);
+      messageLink = results[0]['mLink']
+    }
+  });
+
+  client.calls
+  .create({
+      url: messageLink,
+      to: callNumber,
+      from: myNumber
+    })
+  .then(call => console.log(call.sid));
 })
 
 
